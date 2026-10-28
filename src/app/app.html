@@ -43,7 +43,11 @@
       {{ cargando ? 'Analizando...' : 'Evaluar Transacción' }}
     </button>
   </form>
+  <button (click)="onRetrain()" [disabled]="reentrenando">
+  {{ reentrenando ? 'Reentrenando...' : 'Reentrenar Modelo' }}
+  </button>
 
+<p *ngIf="mensajeReentrenamiento">{{ mensajeReentrenamiento }}</p>
   <!-- Bloque para mostrar la respuesta de Render -->
   <div *ngIf="resultado" [style.background-color]="resultado.is_fraud ? '#f8d7da' : '#d4edda'" style="margin-top: 25px; padding: 15px; border-radius: 6px; border: 1px solid #ccc;">
     <h3 style="margin-top: 0; color: #333;">Resultado del Análisis:</h3>
