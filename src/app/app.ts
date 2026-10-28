@@ -13,8 +13,8 @@ import { FraudService } from './services/fraud';
 export class AppComponent {
   title = 'Detección de Fraude ML';
 
-  // Se añade la opción de dataset (100, 50, 25)
- formData: any = {
+  // Datos del formulario para los modelos XGBoost (100, 50, 25)
+  formData: any = {
     dataset: '100',
     Time: 0,
     Amount: 149.62,
@@ -27,9 +27,12 @@ export class AppComponent {
 
   resultado: any = null;
   cargando: boolean = false;
+  reentrenando: boolean = false;
+  mensajeReentrenamiento: string | null = null;
 
   constructor(private fraudService: FraudService) {}
 
+  // Método para hacer la predicción enviando el dataset seleccionado
   onSubmit() {
     this.cargando = true;
     this.resultado = null;
@@ -43,6 +46,24 @@ export class AppComponent {
         console.error('Error al conectar con la API:', err);
         alert('Ocurrió un error al procesar la predicción. Revisa los logs en la consola.');
         this.cargando = false;
+      }
+    });
+  }
+
+  // Método opcional para disparar el reentrenamiento desde la interfaz
+  onRetrain() {
+    this.reentrenando = true;
+    this.mensajeReentrenamiento = null;
+
+    this.fraudService.reentrenarModelo().subscribe({
+      next: (res) => {
+        this.mensajeReentrenamiento = '¡Reentrenamiento disparado con éxito en GitHub Actions!';
+        this.reentrenando = false;
+      },
+      error: (err) => {
+        console.error('Error al reentrenar:', err);
+        this.mensajeReentrenamiento = 'Error al intentar reentrenar el modelo.';
+        this.reentrenando = false;
       }
     });
   }

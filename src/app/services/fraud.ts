@@ -6,12 +6,18 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class FraudService {
-  // Tu API de Render activa
-  private apiUrl = 'https://fraud-detection-ml-version-100.onrender.com/predict';
+  // URL base de tu backend en Render (SIN /predict al final)
+  private apiUrl = 'https://fraud-detection-ml-version-100.onrender.com';
 
   constructor(private http: HttpClient) { }
 
+  // Método para la predicción de fraude
   predecirFraude(data: any): Observable<any> {
-    return this.http.post<any>(this.apiUrl, data);
+    return this.http.post<any>(`${this.apiUrl}/predict`, data);
+  }
+
+  // (Opcional) Método por si implementas el reentrenamiento desde la interfaz
+  reentrenarModelo(): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/retrain`, {});
   }
 }
