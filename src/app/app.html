@@ -1,0 +1,54 @@
+<div style="max-width: 650px; margin: 40px auto; padding: 25px; font-family: Arial, sans-serif; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+  <h2 style="color: #333; text-align: center; margin-bottom: 5px;">Evaluación de Transacciones</h2>
+  <p style="text-align: center; color: #666; margin-top: 0;">Modelo ML XGBoost - Detección de Fraude</p>
+
+  <form (ngSubmit)="onSubmit()" style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px;">
+    
+    <!-- Selector de Dataset -->
+    <div style="background-color: #f1f3f5; padding: 12px; border-radius: 6px;">
+      <label><b>Versión del Dataset para el Modelo:</b></label>
+      <select [(ngModel)]="formData.dataset" name="dataset" required style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;">
+        <option value="100">Dataset Completo (100%)</option>
+        <option value="50">Dataset Reducido (50%)</option>
+        <option value="25">Dataset Mínimo (25%)</option>
+      </select>
+    </div>
+
+    <div>
+      <label><b>Amount (Monto):</b></label>
+      <input type="number" step="any" [(ngModel)]="formData.Amount" name="Amount" required style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;">
+    </div>
+
+    <div>
+      <label><b>Feature V1:</b></label>
+      <input type="number" step="any" [(ngModel)]="formData.V1" name="V1" required style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;">
+    </div>
+
+    <div>
+      <label><b>Feature V2:</b></label>
+      <input type="number" step="any" [(ngModel)]="formData.V2" name="V2" required style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;">
+    </div>
+
+    <div>
+      <label><b>Feature V3:</b></label>
+      <input type="number" step="any" [(ngModel)]="formData.V3" name="V3" required style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;">
+    </div>
+
+    <div>
+      <label><b>Feature V4:</b></label>
+      <input type="number" step="any" [(ngModel)]="formData.V4" name="V4" required style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;">
+    </div>
+
+    <button type="submit" [disabled]="cargando" style="padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer;">
+      {{ cargando ? 'Analizando...' : 'Evaluar Transacción' }}
+    </button>
+  </form>
+
+  <!-- Bloque para mostrar la respuesta de Render -->
+  <div *ngIf="resultado" [style.background-color]="resultado.is_fraud ? '#f8d7da' : '#d4edda'" style="margin-top: 25px; padding: 15px; border-radius: 6px; border: 1px solid #ccc;">
+    <h3 style="margin-top: 0; color: #333;">Resultado del Análisis:</h3>
+    <p><b>Dataset Utilizado:</b> Versión {{ formData.dataset }}%</p>
+    <p><b>Diagnóstico:</b> {{ resultado.message || (resultado.is_fraud ? 'Transacción Fraudulenta' : 'Transacción Legítima') }}</p>
+    <p *ngIf="resultado.probability !== undefined"><b>Probabilidad de Fraude:</b> {{ (resultado.probability * 100).toFixed(2) }}%</p>
+  </div>
+</div>
