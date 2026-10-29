@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class FraudService {
   // URL base de tu backend en Render (SIN /predict al final)
-  private apiUrl = 'https://fraud-detection-ml-version-100.onrender.com';
+  private apiUrl = 'https://heart-model-pimin.onrender.com';
 
   constructor(private http: HttpClient) { }
 
