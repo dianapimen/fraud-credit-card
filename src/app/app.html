@@ -39,20 +39,30 @@
       <input type="number" step="any" [(ngModel)]="formData.V4" name="V4" required style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;">
     </div>
 
-    <button type="submit" [disabled]="cargando" style="padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer;">
+    <!-- Botón Principal de Evaluación -->
+    <button type="submit" [disabled]="cargando" style="padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; transition: background-color 0.2s;">
       {{ cargando ? 'Analizando...' : 'Evaluar Transacción' }}
     </button>
   </form>
-  <button (click)="onRetrain()" [disabled]="reentrenando">
-  {{ reentrenando ? 'Reentrenando...' : 'Reentrenar Modelo' }}
-  </button>
 
-<p *ngIf="mensajeReentrenamiento">{{ mensajeReentrenamiento }}</p>
-  <!-- Bloque para mostrar la respuesta de Render -->
+  <hr style="margin: 25px 0; border: none; border-top: 1px solid #eee;">
+
+  <!-- Sección de Reentrenamiento con diseño integrado -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <button (click)="onRetrain()" [disabled]="reentrenando" style="padding: 10px; background-color: #6c757d; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer;">
+      {{ reentrenando ? 'Reentrenando en GitHub...' : 'Reentrenar Modelo (CI/CD)' }}
+    </button>
+    <p *ngIf="mensajeReentrenamiento" style="font-size: 14px; color: #495057; background-color: #e9ecef; padding: 10px; border-radius: 4px; margin: 0; text-align: center;">
+      {{ mensajeReentrenamiento }}
+    </p>
+  </div>
+
+  <!-- Bloque para mostrar la respuesta del análisis -->
   <div *ngIf="resultado" [style.background-color]="resultado.is_fraud ? '#f8d7da' : '#d4edda'" style="margin-top: 25px; padding: 15px; border-radius: 6px; border: 1px solid #ccc;">
     <h3 style="margin-top: 0; color: #333;">Resultado del Análisis:</h3>
     <p><b>Dataset Utilizado:</b> Versión {{ formData.dataset }}%</p>
     <p><b>Diagnóstico:</b> {{ resultado.message || (resultado.is_fraud ? 'Transacción Fraudulenta' : 'Transacción Legítima') }}</p>
-    <p *ngIf="resultado.probability !== undefined"><b>Probabilidad de Fraude:</b> {{ (resultado.probability * 100).toFixed(2) }}%</p>
+    <!-- Muestra directamente el valor numérico recibido sin multiplicar de más y con soporte para decimales finos -->
+    <p *ngIf="resultado.probability !== undefined"><b>Probabilidad de Fraude:</b> {{ resultado.probability }}%</p>
   </div>
 </div>
